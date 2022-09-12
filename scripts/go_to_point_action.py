@@ -35,6 +35,7 @@ pub = None
 # action_server
 act_s = None
 
+success = False
 # callbacks
 
 
@@ -95,8 +96,7 @@ def go_straight_ahead(des_pos):
     global yaw_, pub, yaw_precision_, state_
     desired_yaw = math.atan2(des_pos.y - position_.y, des_pos.x - position_.x)
     err_yaw = desired_yaw - yaw_
-    err_pos = math.sqrt(pow(des_pos.y - position_.y, 2) +
-                        pow(des_pos.x - position_.x, 2))
+    err_pos = math.sqrt(pow(desired_position_.y - position_.y, 2) + pow(desired_position_.x - position_.x, 2))
     err_yaw = normalize_angle(desired_yaw - yaw_)
     #rospy.loginfo(err_yaw)
 	
@@ -117,23 +117,53 @@ def go_straight_ahead(des_pos):
         print ('Yaw error: [%s]' % err_yaw)
         change_state(0)
 
+def fix_final_yaw(des_yaw):
+    global yaw_, pub, yaw_precision_2_, state_
+    #print("FIXING FINAL YAW")
+    err_yaw = normalize_angle(des_yaw - yaw_)
+    #print ('Actual yaw:[%s]' % yaw_)
+    #rospy.loginfo(err_yaw)
+
+    twist_msg = Twist()
+    if math.fabs(err_yaw) > yaw_precision_2_:
+        print ('Yaw incorrect: [%s]' % err_yaw)
+        twist_msg.angular.z = kp_a*err_yaw
+        if twist_msg.angular.z > ub_a:
+           twist_msg.angular.z = ub_a
+        elif twist_msg.angular.z < lb_a:
+            twist_msg.angular.z = lb_a
+            
+        pub.publish(twist_msg)
+        #fix_final_yaw(des_pos)
+        #change_state(2)
+
+    # state change conditions
+    elif math.fabs(err_yaw) <= yaw_precision_2_:
+        print ('Yaw correct: [%s]' % err_yaw)
+        change_state(3)
 
 def done():
+    global success
+    print ('DONE')
     twist_msg = Twist()
     twist_msg.linear.x = 0
     twist_msg.angular.z = 0
     pub.publish(twist_msg)
+    success = True
+    act_s.set_succeeded()
 
 
 def planning(goal):
 
-    global state_, desired_position_
+    global state_, desired_position_, des_yaw, success
     global act_s
 
     desired_position_.x = goal.target_pose.pose.position.x
     desired_position_.y = goal.target_pose.pose.position.y
-
-    state_ = 0
+    des_yaw = goal.target_pose.pose.orientation.w
+    
+    #state_ = 0
+    change_state(0)
     rate = rospy.Rate(20)
     success = True
 
@@ -157,6 +187,11 @@ def planning(goal):
             act_s.publish_feedback(feedback)
             go_straight_ahead(desired_position_)
         elif state_ == 2:
+            feedback.stat = "Fixing final yaw!"
+            feedback.actual_pose = pose_
+            act_s.publish_feedback(feedback)
+            fix_final_yaw(des_yaw)
+        elif state_ == 3:
             feedback.stat = "Target reached!"
             feedback.actual_pose = pose_
             act_s.publish_feedback(feedback)
@@ -166,14 +201,15 @@ def planning(goal):
             rospy.logerr('Unknown state!')
 
         rate.sleep()
-    if success:
-        rospy.loginfo('Goal: Succeeded!')
-        act_s.set_succeeded(result)
+    #if success:
+     #   rospy.loginfo('Goal: Succeeded!')
+      #  act_s.set_succeeded(result)
 
 
 def main():
     global pub, active_, act_s
     rospy.init_node('go_to_point')
+    print("GO_TO_POINT started")
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
     act_s = actionlib.SimpleActionServer(

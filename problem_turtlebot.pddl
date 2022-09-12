@@ -14,13 +14,13 @@
 	
 )
 (:goal (and
-    (visited_home wphome)
+   (visited_home wphome)
     (visited wp0)
     (visited wp1)
     (visited wp2)
     (visited wp3)
     (hint_taken wp0)
-;    (hint_taken wp1)
-;    (hint_taken wp2)
-;    (hint_taken wp3)
+    (hint_taken wp1)
+    (hint_taken wp2)
+    (hint_taken wp3)
 )))
