@@ -60,6 +60,8 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    ErlOracle.msg
+   onto.msg
+   check_msg.msg
 #   Message2.msg
  )
 
@@ -185,6 +187,7 @@ add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTE
 ## in contrast to setup.py, you can choose the destination
  catkin_install_python(PROGRAMS
    scripts/go_to_point_action.py
+   scripts/onto_interface.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

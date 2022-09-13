@@ -4,7 +4,7 @@
 
 <include file="$(find exprob_2_moveit)/launch/demo_gazebo.launch"/> 
 
-<node name="go_to_point" pkg="erl2" type="go_to_point_action.py" respawn="false" output="screen"/>
+<node name="go_to_point" pkg="erl2" type="go_to_point_action.py" respawn="false"/>
 
 <!-- arguments -->
 <arg name="domain_path" default="$(find erl2)/domain_turtlebot.pddl" />
@@ -53,6 +53,11 @@ output="screen">
 	<param name="action_feedback_topic" value="action_feedback" />
 </node>
 
+<!-- Launching ARMOR service-->
+<node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
+
+<!-- Launching ontology interface-->
+<node name="onto_interface"  pkg="erl2" type="onto_interface.py" output="screen" />
 
 <!-- Launching simulation file-->
 <node name="simulation" pkg="erl2" type="simulation" output="screen"/>
@@ -113,5 +118,10 @@ output="screen">
 <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
 <arg name="pddl_action_name" value="take_hint" />
 </include-->
+
+<include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
+	<arg name="pddl_action_name" value="check_hypo" />
+	<arg name="action_probability" value="0.2"/>
+</include>
 
 </launch>
