@@ -12,6 +12,7 @@
 	(not(hint_taken wp2))
 	(not(hint_taken wp3))
 	(not(hypo_complete))
+	(not(hypo_to_check))
 	
 )
 (:goal (and
@@ -20,9 +21,10 @@
 ;    (visited wp1)
 ;    (visited wp2)
 ;    (visited wp3)
-    (hint_taken wp0)
-    (hint_taken wp1)
-    (hint_taken wp2)
-    (hint_taken wp3)
+;    (hint_taken wp0)
+;    (hint_taken wp1)
+;    (hint_taken wp2)
+;    (hint_taken wp3)
+    (hypo_to_check)
     (hypo_complete)
 )))

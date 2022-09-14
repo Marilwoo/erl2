@@ -63,10 +63,10 @@
 )
 
 ;; Checking if hypothesis is complete and consistent
-(:durative-action check_hypo
+(:durative-action check_hint
 	:parameters (?wp - waypoint)
 	:duration ( = ?duration 60)
-	:condition (at start (hypo_to_check))
+	:condition (at start (and(hypo_to_check)(hint_taken ?wp)(robot_at ?wp)))
 	:effect (at end (and(hypo_complete)(not(hypo_to_check))))
 )
 

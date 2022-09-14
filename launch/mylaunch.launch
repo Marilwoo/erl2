@@ -101,6 +101,13 @@ output="screen">
 	<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
+<node name="rosplan_interface_check_hint" pkg="my_rosplan_interface" type="checkhintaction" respawn="false" output="screen">
+	<param name="knowledge_base" value="rosplan_knowledge_base" />
+	<param name="pddl_action_name" value="check_hint" />
+	<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+	<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+</node>
+
 <!-- Simulated actions -->
 
 <!--include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
@@ -117,11 +124,11 @@ output="screen">
 
 <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
 <arg name="pddl_action_name" value="take_hint" />
-</include-->
+</include>
 
 <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch" >
-	<arg name="pddl_action_name" value="check_hypo" />
+	<arg name="pddl_action_name" value="check_hint" />
 	<arg name="action_probability" value="0.2"/>
-</include>
+</include-->
 
 </launch>

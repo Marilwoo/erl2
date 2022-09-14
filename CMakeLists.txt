@@ -62,6 +62,7 @@ find_package(catkin REQUIRED COMPONENTS
    ErlOracle.msg
    onto.msg
    check_msg.msg
+   hints.msg
 #   Message2.msg
  )
 
