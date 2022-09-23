@@ -1,3 +1,3 @@
 int32 to_do
 string ID
-string value
+string class_1

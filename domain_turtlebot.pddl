@@ -10,8 +10,8 @@
 (:predicates
 	(robot_at ?wp - waypoint)
 	(robot_at_home ?h - home)
-	(visited ?wp - waypoint)
-	(visited_home ?h - home)
+;	(visited ?wp - waypoint)
+;	(visited_home ?h - home)
 	(hint_taken ?wp - waypoint)
 	(hypo_to_check)
 	(hypo_complete)
@@ -24,7 +24,7 @@
 	:duration ( = ?duration 60)
 	:condition (at start (robot_at ?from))
 	:effect (and
-		;(at end (visited ?to))
+;		(at end (visited ?to))
 		(at end (robot_at ?to))
 		(at start (not (robot_at ?from)))
 	)
@@ -36,7 +36,7 @@
 	:duration ( = ?duration 60)
 	:condition (at start (robot_at ?from))
 	:effect (and
-		;(at end (visited_home ?to))
+;		(at end (visited_home ?to))
 		(at end (robot_at_home ?to))
 		(at start (not (robot_at ?from)))
 	)
@@ -48,7 +48,7 @@
 	:duration ( = ?duration 60)
 	:condition (at start (robot_at_home ?h))
 	:effect (and
-		;(at end (visited ?to))
+;		(at end (visited ?to))
 		(at end (robot_at ?to))
 		(at start (not (robot_at_home ?h)))
 	)
@@ -64,9 +64,9 @@
 
 ;; Checking if hypothesis is complete and consistent
 (:durative-action check_hint
-	:parameters (?wp - waypoint)
+	:parameters (?h - home)
 	:duration ( = ?duration 60)
-	:condition (at start (and(hypo_to_check)(hint_taken ?wp)(robot_at ?wp)))
+	:condition (at start (and(hypo_to_check)(robot_at_home ?h)))
 	:effect (at end (and(hypo_complete)(not(hypo_to_check))))
 )
 

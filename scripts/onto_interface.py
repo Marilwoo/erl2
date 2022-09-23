@@ -41,9 +41,11 @@ import math
 import time
 from armor_msgs.msg import * 
 from armor_msgs.srv import *
-from erl2.msg import onto, check_msg
+from erl2.msg import onto #, check_msg
+from erl2.srv import Check_srv, Check_srvRequest, Check_srvResponse
 
 ans = 0
+check = False
 
 ##
 # \brief This function loads the ontology file. Here is also defined the path of ontology file.
@@ -79,27 +81,35 @@ def to_do(resp):
 	global pub
 	to_do = resp.to_do
 	ID = resp.ID
-	value = resp.value
+	class_1 = resp.class_1
 	#class_2 = resp.class_2
 	#class_3 = resp.class_3
 	if to_do == 1:
-		load_person(ID, value)
+		load_person(ID, class_1)
 	elif to_do == 2:
-		load_weapon(ID, value)
+		load_weapon(ID, class_1)
 	elif to_do == 3:
-		load_location(ID, value)
+		load_location(ID, class_1)
 	elif to_do == 4:
-		check = check_hypothesis(ID)
-		pub.publish(check)
+		delete_hypothesis(ID)
+	
+def check_hyp(req):
+	#print("ONTO_INTERFACE in check_hyp")
+	ID = req.ID_srv
+	#print("Check_hyp ID: %s" % ID)
+	res = Check_srvResponse()
+	res.check = check_hypothesis(ID)
+	print("ONTO INTERFACE Check result: ", res.check)
+	return res.check
+
 	
 ##
 #  \brief This function is used to load a hint of type person
 #  \param ID: this parameter is the ID of the person to be loaded
-#  \param value this parameter contains the name of the hint
+#  \param class_1 this parameter contains the name of the hint
 #  \return None
 # 
-def load_person(ID, value):
-	global check
+def load_person(ID, class_1):
 	try:
         	class_id="PERSON"
         	req=ArmorDirectiveReq()
@@ -108,25 +118,24 @@ def load_person(ID, value):
         	req.command= 'ADD'
         	req.primary_command_spec= 'IND'
         	req.secondary_command_spec= 'CLASS'
-        	req.args= [value, class_id]
+        	req.args= [class_1, class_id]
         	msg = armor_service(req)
         	res=msg.armor_response
         	reason()
         	disjoint(class_id)
         	reason()
-        	add_hypothesis(ID, "who", value)
+        	add_hypothesis(ID, "who", class_1)
         	save()
-        	check = check_hypothesis(ID)
 	except rospy.ServiceException as e:
 		print(e)
 		
 ##
 #  \brief This function is used to load a hint of type weapon
 #  \param ID: this parameter is the ID of the weapon to be loaded
-#  \param value this parameter contains the name of the hint
+#  \param class_1 this parameter contains the name of the hint
 #  \return None
 # 	
-def load_weapon(ID, value):
+def load_weapon(ID, class_1):
 	try:
         	class_id="WEAPON"
         	req=ArmorDirectiveReq()
@@ -135,25 +144,25 @@ def load_weapon(ID, value):
         	req.command= 'ADD'
         	req.primary_command_spec= 'IND'
         	req.secondary_command_spec= 'CLASS'
-        	req.args= [value, class_id]
+        	req.args= [class_1, class_id]
         	msg = armor_service(req)
         	res=msg.armor_response
         	reason()
         	disjoint(class_id)
         	reason()
-        	add_hypothesis(ID, "what", value)
+        	add_hypothesis(ID, "what", class_1)
         	save()
-        	check = check_hypothesis(ID)
+        	#check = check_hypothesis(ID)
 	except rospy.ServiceException as e:
 		print(e)
 		
 ##
 #  \brief This function is used to load a hint of type location
 #  \param ID: this parameter is the ID of the location to be loaded
-#  \param value this parameter contains the name of the hint
+#  \param class_1 this parameter contains the name of the hint
 #  \return None
 # 		
-def load_location(ID, value):
+def load_location(ID, class_1):
 	try:
         	class_id="PLACE"
         	req=ArmorDirectiveReq()
@@ -162,15 +171,15 @@ def load_location(ID, value):
         	req.command= 'ADD'
         	req.primary_command_spec= 'IND'
         	req.secondary_command_spec= 'CLASS'
-        	req.args= [value, class_id]
+        	req.args= [class_1, class_id]
         	msg = armor_service(req)
         	res=msg.armor_response
         	reason()
         	disjoint(class_id)
         	reason()
-        	add_hypothesis(ID, "where", value)
+        	add_hypothesis(ID, "where", class_1)
         	save()
-        	check = check_hypothesis(ID)
+        	#check = check_hypothesis(ID)
 	except rospy.ServiceException as e:
 		print(e)
 
@@ -248,9 +257,25 @@ def add_hypothesis(ID, class_type, name):
         msg = armor_service(req)
         res=msg.armor_response
         save()
-        check = check_hypothesis(ID)
     except rospy.ServiceException as e:
         print(e)
+        
+def delete_hypothesis(ID):
+    try:
+        print("in delete hypo")
+        req=ArmorDirectiveReq()
+        req.client_name= 'tutorial'
+        req.reference_name= 'ontoTest'
+        req.command= 'REMOVE'
+        req.primary_command_spec= 'IND'
+        req.secondary_command_spec= 'CLASS'
+        req.args= [ID, 'HYPOTHESIS']
+        msg = armor_service(req)
+        res=msg.armor_response
+        save()
+    except rospy.ServiceException as e:
+        print(e)
+		
 
 ##
 #  \brief This function cleans the query returned from the ontology
@@ -277,6 +302,7 @@ def clean_queries(query):
 
 def check_hypothesis(ID):
     try:
+        #print("\nONTO_INTERFACE In check_hypothesis\n")
         completed=0
         inconsistent=0
         reason()
@@ -306,6 +332,8 @@ def check_hypothesis(ID):
         for i in range(len(res_final)):
             if res_final[i]==ID:
                 inconsistent=1
+        #print("complete: ", completed, "inconsistent: ", inconsistent)
+        print("ID checked: ", ID)
         if completed==1 and inconsistent==0:
             return True
         else :
@@ -326,10 +354,11 @@ def main():
 	armor_service = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
 	rospy.Subscriber("/ontology", onto, to_do)
 	rospy.wait_for_service('armor_interface_srv')
-	pub = rospy.Publisher("/check", check_msg, queue_size = 10)
+	#pub = rospy.Publisher("/check", check_msg, queue_size = 10)
+	check_hypo = rospy.Service("/check", Check_srv, check_hyp);
+	
 	load_onto()
 	rospy.spin()
         
 if __name__ == '__main__':
     main()
-    

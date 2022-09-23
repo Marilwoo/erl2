@@ -70,6 +70,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
    FILES
    Oracle.srv
+   Check_srv.srv
 #   Service2.srv
  )
 
@@ -189,6 +190,7 @@ add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTE
  catkin_install_python(PROGRAMS
    scripts/go_to_point_action.py
    scripts/onto_interface.py
+   scripts/planning.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -10,8 +10,7 @@
 <arg name="domain_path" default="$(find erl2)/domain_turtlebot.pddl" />
 <arg name="problem_path" default="$(find erl2)/problem_turtlebot.pddl" />
 <!-- knowledge base -->
-<node name="rosplan_knowledge_base" pkg="rosplan_knowledge_base" type="knowledgeBase" respawn="false"
-output="screen">
+<node name="rosplan_knowledge_base" pkg="rosplan_knowledge_base" type="knowledgeBase" respawn="false">
 	<param name="domain_path" value="$(arg domain_path)" />
 	<param name="problem_path" value="$(arg problem_path)" />
 <!-- conditional planning flags -->
@@ -38,15 +37,13 @@ output="screen">
 	<arg name="planner_interface"    value="$(arg planner_interface)" />
 </include>
 
-<node name="rosplan_parsing_interface" pkg="rosplan_planning_system" type="pddl_simple_plan_parser" respawn="false"
-output="screen">
+<node name="rosplan_parsing_interface" pkg="rosplan_planning_system" type="pddl_simple_plan_parser" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="planner_topic" value="/rosplan_planner_interface/planner_output" />
 	<param name="plan_topic" value="complete_plan" />
 </node>
 
-<node name="rosplan_plan_dispatcher" pkg="rosplan_planning_system" type="pddl_simple_plan_dispatcher" respawn="false"
-output="screen">
+<node name="rosplan_plan_dispatcher" pkg="rosplan_planning_system" type="pddl_simple_plan_dispatcher" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="plan_topic" value="/rosplan_parsing_interface/complete_plan" />
 	<param name="action_dispatch_topic" value="action_dispatch" />
@@ -73,35 +70,35 @@ output="screen">
 
 <!-- Real actions -->
 
-<node name="rosplan_interface_goto_waypoint" pkg="my_rosplan_interface" type="movingaction" respawn="false" output="screen">
+<node name="rosplan_interface_goto_waypoint" pkg="my_rosplan_interface" type="movingaction" output="screen" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="pddl_action_name" value="goto_waypoint" />
 	<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 	<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
-<node name="rosplan_interface_goto_home" pkg="my_rosplan_interface" type="goinghomeaction" respawn="false" output="screen">
+<node name="rosplan_interface_goto_home" pkg="my_rosplan_interface" type="goinghomeaction" output="screen" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="pddl_action_name" value="goto_home" />
 	<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 	<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
-<node name="rosplan_interface_movefrom_home" pkg="my_rosplan_interface" type="movefromhomeaction" respawn="false" output="screen">
+<node name="rosplan_interface_movefrom_home" pkg="my_rosplan_interface" type="movefromhomeaction" output="screen" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="pddl_action_name" value="movefrom_home" />
 	<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 	<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
-<node name="rosplan_interface_take_hint" pkg="my_rosplan_interface" type="takehintaction" respawn="false" output="screen">
+<node name="rosplan_interface_take_hint" pkg="my_rosplan_interface" type="takehintaction" output="screen" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="pddl_action_name" value="take_hint" />
 	<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
 	<param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
 </node>
 
-<node name="rosplan_interface_check_hint" pkg="my_rosplan_interface" type="checkhintaction" respawn="false" output="screen">
+<node name="rosplan_interface_check_hint" pkg="my_rosplan_interface" type="checkhintaction" output="screen" respawn="false">
 	<param name="knowledge_base" value="rosplan_knowledge_base" />
 	<param name="pddl_action_name" value="check_hint" />
 	<param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
@@ -130,5 +127,8 @@ output="screen">
 	<arg name="pddl_action_name" value="check_hint" />
 	<arg name="action_probability" value="0.2"/>
 </include-->
+
+<!--Launching node for relplanning-->
+<!--node name="planning_loop" pkg="erl2" type="planning.py"/-->
 
 </launch>
