@@ -60,8 +60,6 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    ErlOracle.msg
-   onto.msg
-   check_msg.msg
    hints.msg
 #   Message2.msg
  )
@@ -157,7 +155,6 @@ add_dependencies(${erl2} ${${erl2}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(simulation src/simulation.cpp)
-#add_executable(my_moveit src/my_moveit.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -168,15 +165,11 @@ add_executable(simulation src/simulation.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-#add_dependencies(my_moveit ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(simulation
    ${catkin_LIBRARIES}
  )
-# target_link_libraries(my_moveit
-#   ${catkin_LIBRARIES}
-# )
 
 #############
 ## Install ##
@@ -189,7 +182,6 @@ add_dependencies(simulation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTE
 ## in contrast to setup.py, you can choose the destination
  catkin_install_python(PROGRAMS
    scripts/go_to_point_action.py
-   scripts/onto_interface.py
    scripts/planning.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )

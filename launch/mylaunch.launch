@@ -129,6 +129,6 @@
 </include-->
 
 <!--Launching node for relplanning-->
-<!--node name="planning_loop" pkg="erl2" type="planning.py"/-->
+<node name="planning_loop" pkg="erl2" type="planning.py"/>
 
 </launch>

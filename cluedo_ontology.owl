@@ -218,6 +218,7 @@
         <rdf:type rdf:resource="http://www.emarolab.it/cluedo-ontology#INCONSISTENT"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#dagger"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#rope"/>
+        <where rdf:resource="http://www.emarolab.it/cluedo-ontology#bathroom"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#billiardRoom"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#conservatory"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#study"/>
@@ -236,6 +237,7 @@
         <rdf:type rdf:resource="http://www.emarolab.it/cluedo-ontology#HYPOTHESIS"/>
         <rdf:type rdf:resource="http://www.emarolab.it/cluedo-ontology#INCONSISTENT"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#candlestick"/>
+        <what rdf:resource="http://www.emarolab.it/cluedo-ontology#dagger"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#revolver"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#rope"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#billiardRoom"/>
@@ -243,6 +245,7 @@
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#diningRoom"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#library"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#study"/>
+        <who rdf:resource="http://www.emarolab.it/cluedo-ontology#mrsPeacock"/>
         <who rdf:resource="http://www.emarolab.it/cluedo-ontology#profPlum"/>
     </owl:Thing>
     
@@ -280,6 +283,7 @@
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#conservatory"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#diningRoom"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#kitchen"/>
+        <where rdf:resource="http://www.emarolab.it/cluedo-ontology#library"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#study"/>
         <who rdf:resource="http://www.emarolab.it/cluedo-ontology#missScarlett"/>
         <who rdf:resource="http://www.emarolab.it/cluedo-ontology#mrsPeacock"/>
@@ -298,6 +302,7 @@
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#candlestick"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#dagger"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#leadPipe"/>
+        <what rdf:resource="http://www.emarolab.it/cluedo-ontology#revolver"/>
         <what rdf:resource="http://www.emarolab.it/cluedo-ontology#spanner"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#hall"/>
         <where rdf:resource="http://www.emarolab.it/cluedo-ontology#library"/>
@@ -306,6 +311,7 @@
         <who rdf:resource="http://www.emarolab.it/cluedo-ontology#missScarlett"/>
         <who rdf:resource="http://www.emarolab.it/cluedo-ontology#mrsPeacock"/>
         <who rdf:resource="http://www.emarolab.it/cluedo-ontology#mrsWhite"/>
+        <who rdf:resource="http://www.emarolab.it/cluedo-ontology#profPlum"/>
     </owl:Thing>
     
 
